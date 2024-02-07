@@ -21,6 +21,7 @@ description: |-
 
 ### Optional
 
+- `configuration_permissions` (List of Number) The configuration permissions of the user
 - `email` (String) The email of the user
 - `first_name` (String) The first name of the user
 - `is_active` (Boolean) The active status of the user

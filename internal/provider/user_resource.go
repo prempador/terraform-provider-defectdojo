@@ -32,15 +32,15 @@ type userResource struct {
 }
 
 type userResourceModel struct {
-	ID          types.Int64  `tfsdk:"id"`
-	Username    types.String `tfsdk:"username"`
-	FirstName   types.String `tfsdk:"first_name"`
-	LastName    types.String `tfsdk:"last_name"`
-	Email       types.String `tfsdk:"email"`
-	IsActive    types.Bool   `tfsdk:"is_active"`
-	IsSuperUser types.Bool   `tfsdk:"is_superuser"`
-	Password    types.String `tfsdk:"password"`
-	// ConfigurationPermissions types.String `tfsdk:"configuration_permissions"`
+	ID                       types.Int64  `tfsdk:"id"`
+	Username                 types.String `tfsdk:"username"`
+	FirstName                types.String `tfsdk:"first_name"`
+	LastName                 types.String `tfsdk:"last_name"`
+	Email                    types.String `tfsdk:"email"`
+	IsActive                 types.Bool   `tfsdk:"is_active"`
+	IsSuperUser              types.Bool   `tfsdk:"is_superuser"`
+	Password                 types.String `tfsdk:"password"`
+	ConfigurationPermissions types.List   `tfsdk:"configuration_permissions"`
 }
 
 // Metadata returns the data source type name.
@@ -93,10 +93,12 @@ func (d *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Optional:    true,
 				Sensitive:   true,
 			},
-			// "configuration_permissions": schema.StringAttribute{
-			// 	Description: "The configuration permissions of the user",
-			// 	Optional:    true,
-			// },
+			"configuration_permissions": schema.ListAttribute{
+				ElementType: types.Int64Type,
+				Description: "The configuration permissions of the user",
+				Computed:    true,
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -130,15 +132,23 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	configurations := make([]*int32, 0)
+	diags = plan.ConfigurationPermissions.ElementsAs(ctx, &configurations, true)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	// Generate request from plan
 	userRequest := defectdojo.UserRequest{
-		Username:    plan.Username.ValueString(),
-		FirstName:   plan.FirstName.ValueStringPointer(),
-		LastName:    plan.LastName.ValueStringPointer(),
-		Email:       plan.Email.ValueStringPointer(),
-		IsActive:    plan.IsActive.ValueBoolPointer(),
-		IsSuperuser: plan.IsSuperUser.ValueBoolPointer(),
-		Password:    plan.Password.ValueStringPointer(),
+		Username:                 plan.Username.ValueString(),
+		FirstName:                plan.FirstName.ValueStringPointer(),
+		LastName:                 plan.LastName.ValueStringPointer(),
+		Email:                    plan.Email.ValueStringPointer(),
+		IsActive:                 plan.IsActive.ValueBoolPointer(),
+		IsSuperuser:              plan.IsSuperUser.ValueBoolPointer(),
+		Password:                 plan.Password.ValueStringPointer(),
+		ConfigurationPermissions: configurations,
 	}
 
 	// Create new product type
@@ -162,6 +172,12 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	// Set state to fully populated data
 	diags = resp.State.Set(ctx, plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	diags = resp.State.SetAttribute(ctx, path.Root("configuration_permissions"), user.ConfigurationPermissions)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -203,6 +219,12 @@ func (r *userResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	diags = resp.State.SetAttribute(ctx, path.Root("configuration_permissions"), user.ConfigurationPermissions)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
 // Update updates the resource and sets the updated Terraform state on success.
@@ -220,6 +242,13 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			"Password Update Not Supported",
 			"Password updates are not supported by the Defectdojo API. Please remove the password attribute from the update plan.",
 		)
+		return
+	}
+
+	configurations := make([]*int32, 0)
+	diags = plan.ConfigurationPermissions.ElementsAs(ctx, &configurations, true)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
@@ -264,6 +293,12 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 
 	// Set state to fully populated data
 	diags = resp.State.Set(ctx, plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	diags = resp.State.SetAttribute(ctx, path.Root("configuration_permissions"), user.ConfigurationPermissions)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

@@ -26,6 +26,8 @@ func TestAccUserResource(t *testing.T) {
 					resource.TestCheckResourceAttr("defectdojo_user.test", "email", ""),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_active", "false"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_superuser", "false"),
+					// Verify default configuration_permissions length
+					resource.TestCheckResourceAttr("defectdojo_user.test", "configuration_permissions.#", "0"),
 				),
 			},
 			// ImportState testing
@@ -54,6 +56,8 @@ func TestAccUserResource(t *testing.T) {
 					resource.TestCheckResourceAttr("defectdojo_user.test", "email", "email@email.com"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_active", "true"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_superuser", "true"),
+					// can't update configuration_permissions for now
+					resource.TestCheckResourceAttr("defectdojo_user.test", "configuration_permissions.#", "0"),
 				),
 			},
 			// Delete testing automatically occurs in TestCase
