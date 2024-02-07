@@ -32,6 +32,7 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
+      - run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
       - run: go mod download
       - run: go build -v .
       - name: Run linters
@@ -47,6 +48,7 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
+      - run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
       - run: go generate ./...
       - name: git diff
         run: |
@@ -79,6 +81,7 @@ jobs:
   #       with:
   #         terraform_version: ${{ matrix.terraform }}
   #         terraform_wrapper: false
+  #     - run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
   #     - run: go mod download
   #     - env:
   #         TF_ACC: "1"
