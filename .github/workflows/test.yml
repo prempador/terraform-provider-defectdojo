@@ -14,6 +14,7 @@ on:
 # setting this for now until it is officially published
 env:
   GOPRIVATE: 'github.com/prempador/go-defectdojo'
+  GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
 
 # Testing only needs permissions to read the repository contents.
 permissions:
