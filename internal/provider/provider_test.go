@@ -4,10 +4,22 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+const (
+	// providerConfig is a shared configuration to combine with the actual
+	// test configuration so the Defectdojo client is properly configured.
+	// It is also possible to use the DEFECTDOJO_ environment variables instead,
+	// such as updating the Makefile and running the testing through that tool.
+	providerConfig = `
+	provider "defectdojo" {}
+	`
 )
 
 // testAccProtoV6ProviderFactories are used to instantiate a provider during
@@ -15,11 +27,35 @@ import (
 // CLI command executed to create a provider server to which the CLI can
 // reattach.
 var testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-	"scaffolding": providerserver.NewProtocol6WithError(New("test")()),
+	"defectdojo": providerserver.NewProtocol6WithError(New("test")()),
 }
 
-func testAccPreCheck(t *testing.T) {
-	// You can add code here to run prior to any test case execution, for example assertions
-	// about the appropriate environment variables being set are common to see in a pre-check
-	// function.
+func TestMain(m *testing.M) {
+	resource.TestMain(m)
+}
+
+func TestAccPreCheck(t *testing.T) {
+	testDefectdojoHost(t)
+	if v := os.Getenv("DEFECTDOJO_TOKEN"); v == "" {
+		testDefectdojoUsername(t)
+		testDefectdojoPassword(t)
+	}
+}
+
+func testDefectdojoUsername(t *testing.T) {
+	if v := os.Getenv("DEFECTDOJO_USERNAME"); v == "" {
+		t.Fatal("DEFECTDOJO_USERNAME must be set for this acceptance test")
+	}
+}
+
+func testDefectdojoPassword(t *testing.T) {
+	if v := os.Getenv("DEFECTDOJO_PASSWORD"); v == "" {
+		t.Fatal("DEFECTDOJO_PASSWORD must be set for this acceptance test")
+	}
+}
+
+func testDefectdojoHost(t *testing.T) {
+	if v := os.Getenv("DEFECTDOJO_HOST"); v == "" {
+		t.Fatal("DEFECTDOJO_HOST must be set for this acceptance test")
+	}
 }

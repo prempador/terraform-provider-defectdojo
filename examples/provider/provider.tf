@@ -1,3 +1,6 @@
-provider "scaffolding" {
-  # example configuration here
+provider "defectdojo" {
+  host     = "https://defectdojo.example.com"
+  username = "admin"
+  password = "password"
+  token    = "token"
 }
