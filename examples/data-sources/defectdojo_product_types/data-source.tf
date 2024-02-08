@@ -1,0 +1,1 @@
+data "defectdojo_product_types" "test" {}
