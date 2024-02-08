@@ -8,8 +8,6 @@ import (
 	"flag"
 	"log"
 
-	_ "github.com/prempador/go-defectdojo"
-
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/prempador/terraform-provider-defectdojo/internal/provider"
 )
