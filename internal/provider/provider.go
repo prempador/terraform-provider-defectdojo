@@ -230,7 +230,9 @@ func (p *DefectdojoProvider) Resources(ctx context.Context) []func() resource.Re
 }
 
 func (p *DefectdojoProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewProductTypesDataSource,
+	}
 }
 
 func New(version string) func() provider.Provider {
