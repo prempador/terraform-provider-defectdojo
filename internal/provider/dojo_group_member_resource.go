@@ -106,7 +106,7 @@ func (r *dojoGroupMemberResource) Configure(_ context.Context, req resource.Conf
 	client, ok := req.ProviderData.(*defectdojo.APIClient)
 	if !ok {
 		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
+			"Unexpected Resource Configure Type",
 			fmt.Sprintf("Expected *defectdojo.APIClient, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
