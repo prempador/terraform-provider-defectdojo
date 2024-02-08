@@ -43,12 +43,12 @@ type dojoGroupResourceModel struct {
 }
 
 // Metadata returns the data source type name.
-func (d *dojoGroupResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *dojoGroupResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_dojo_group"
 }
 
 // Schema defines the schema for the data source.
-func (d *dojoGroupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *dojoGroupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
@@ -83,7 +83,7 @@ func (d *dojoGroupResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 }
 
 // Configure adds the provider configured client to the data source.
-func (d *dojoGroupResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *dojoGroupResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -98,7 +98,7 @@ func (d *dojoGroupResource) Configure(_ context.Context, req resource.ConfigureR
 		return
 	}
 
-	d.client = client
+	r.client = client
 }
 
 // Create creates the resource and sets the initial Terraform state.

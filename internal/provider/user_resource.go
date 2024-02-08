@@ -47,12 +47,12 @@ type userResourceModel struct {
 }
 
 // Metadata returns the data source type name.
-func (d *userResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *userResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_user"
 }
 
 // Schema defines the schema for the data source.
-func (d *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
@@ -107,7 +107,7 @@ func (d *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 }
 
 // Configure adds the provider configured client to the data source.
-func (d *userResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *userResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -122,7 +122,7 @@ func (d *userResource) Configure(_ context.Context, req resource.ConfigureReques
 		return
 	}
 
-	d.client = client
+	r.client = client
 }
 
 // Create creates the resource and sets the initial Terraform state.
