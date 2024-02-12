@@ -224,6 +224,7 @@ func (p *DefectdojoProvider) Resources(ctx context.Context) []func() resource.Re
 	return []func() resource.Resource{
 		NewDojoGroupResource,
 		NewDojoGroupMemberResource,
+		NewProductResource,
 		NewProductTypeResource,
 		NewUserResource,
 	}
