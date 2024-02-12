@@ -126,7 +126,7 @@ func (r *dojoGroupResource) Create(ctx context.Context, req resource.CreateReque
 		SocialProvider:           *defectdojo.NewNullableString(plan.SocialProvider.ValueStringPointer()),
 	}
 
-	// Create new product type
+	// Create new dojo group
 	dojoGroup, res, err := r.client.DojoGroupsAPI.DojoGroupsCreate(ctx).DojoGroupRequest(dojoGroupRequest).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -166,7 +166,7 @@ func (r *dojoGroupResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
-	// Get refreshed product type value from Defectdojo
+	// Get refreshed dojo group value from Defectdojo
 	dojoGroup, res, err := r.client.DojoGroupsAPI.DojoGroupsRetrieve(ctx, int32(state.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -221,7 +221,7 @@ func (r *dojoGroupResource) Update(ctx context.Context, req resource.UpdateReque
 		SocialProvider:           *defectdojo.NewNullableString(plan.SocialProvider.ValueStringPointer()),
 	}
 
-	// Update existing product type
+	// Update existing dojo group
 	_, res, err := r.client.DojoGroupsAPI.DojoGroupsUpdate(ctx, int32(plan.ID.ValueInt64())).DojoGroupRequest(dojoGroupRequest).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -231,7 +231,7 @@ func (r *dojoGroupResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
-	// Get refreshed product type value from Defectdojo
+	// Get refreshed dojo group value from Defectdojo
 	dojoGroup, res, err := r.client.DojoGroupsAPI.DojoGroupsRetrieve(ctx, int32(plan.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -271,7 +271,7 @@ func (r *dojoGroupResource) Delete(ctx context.Context, req resource.DeleteReque
 		return
 	}
 
-	// Delete existing product type
+	// Delete existing dojo group
 	res, err := r.client.DojoGroupsAPI.DojoGroupsDestroy(ctx, int32(state.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(

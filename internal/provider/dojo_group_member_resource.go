@@ -133,7 +133,7 @@ func (r *dojoGroupMemberResource) Create(ctx context.Context, req resource.Creat
 		Role:  roleID[plan.Role],
 	}
 
-	// Create new product type
+	// Create new group member
 	dojoGroupMember, res, err := r.client.DojoGroupMembersAPI.DojoGroupMembersCreate(ctx).DojoGroupMemberRequest(dojoGroupRequest).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -167,7 +167,7 @@ func (r *dojoGroupMemberResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	// Get refreshed product type value from Defectdojo
+	// Get refreshed group member value from Defectdojo
 	dojoGroupMember, res, err := r.client.DojoGroupMembersAPI.DojoGroupMembersRetrieve(ctx, int32(state.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -208,7 +208,7 @@ func (r *dojoGroupMemberResource) Update(ctx context.Context, req resource.Updat
 		Role:  roleID[plan.Role],
 	}
 
-	// Update existing product type
+	// Update existing group member
 	_, res, err := r.client.DojoGroupMembersAPI.DojoGroupMembersUpdate(ctx, int32(plan.ID.ValueInt64())).DojoGroupMemberRequest(dojoGroupRequest).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -218,7 +218,7 @@ func (r *dojoGroupMemberResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	// Get refreshed product type value from Defectdojo
+	// Get refreshed group member value from Defectdojo
 	dojoGroupMember, res, err := r.client.DojoGroupMembersAPI.DojoGroupMembersRetrieve(ctx, int32(plan.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -252,7 +252,7 @@ func (r *dojoGroupMemberResource) Delete(ctx context.Context, req resource.Delet
 		return
 	}
 
-	// Delete existing product type
+	// Delete existing group member
 	res, err := r.client.DojoGroupMembersAPI.DojoGroupMembersDestroy(ctx, int32(state.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(

@@ -154,7 +154,7 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		ConfigurationPermissions: configurations,
 	}
 
-	// Create new product type
+	// Create new user
 	user, res, err := r.client.UsersAPI.UsersCreate(ctx).UserRequest(userRequest).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -197,7 +197,7 @@ func (r *userResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	// Get refreshed product type value from Defectdojo
+	// Get refreshed user value from Defectdojo
 	user, res, err := r.client.UsersAPI.UsersRetrieve(ctx, int32(state.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -265,7 +265,7 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		IsSuperuser: plan.IsSuperUser.ValueBoolPointer(),
 	}
 
-	// Update existing product type
+	// Update existing user
 	_, res, err := r.client.UsersAPI.UsersUpdate(ctx, int32(plan.ID.ValueInt64())).UserRequest(userRequest).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -275,7 +275,7 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	// Get refreshed product type value from Defectdojo
+	// Get refreshed user value from Defectdojo
 	user, res, err := r.client.UsersAPI.UsersRetrieve(ctx, int32(plan.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -318,7 +318,7 @@ func (r *userResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
-	// Delete existing product type
+	// Delete existing user
 	res, err := r.client.UsersAPI.UsersDestroy(ctx, int32(state.ID.ValueInt64())).Execute()
 	if err != nil {
 		resp.Diagnostics.AddError(
