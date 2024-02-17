@@ -6,11 +6,13 @@ package provider
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/hashicorp/go-retryablehttp"
@@ -36,10 +38,12 @@ type DefectdojoProvider struct {
 
 // DefectdojoProviderModel describes the provider data model.
 type DefectdojoProviderModel struct {
-	Host     types.String `tfsdk:"host"`
-	Username types.String `tfsdk:"username"`
-	Password types.String `tfsdk:"password"`
-	Token    types.String `tfsdk:"token"`
+	Host                  types.String `tfsdk:"host"`
+	Username              types.String `tfsdk:"username"`
+	Password              types.String `tfsdk:"password"`
+	Token                 types.String `tfsdk:"token"`
+	HTTPProxy             types.String `tfsdk:"http_proxy"`
+	TLSInsecureSkipVerify types.Bool   `tfsdk:"tls_insecure_skip_verify"`
 }
 
 func (p *DefectdojoProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -68,6 +72,14 @@ func (p *DefectdojoProvider) Schema(ctx context.Context, req provider.SchemaRequ
 				Optional:            true,
 				Sensitive:           true,
 			},
+			"http_proxy": schema.StringAttribute{
+				MarkdownDescription: "The HTTP proxy to use for requests to the defectdojo API",
+				Optional:            true,
+			},
+			"tls_insecure_skip_verify": schema.BoolAttribute{
+				MarkdownDescription: "Whether to insecurely skip verifying the server's certificate chain and host name",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -88,6 +100,8 @@ func (p *DefectdojoProvider) Configure(ctx context.Context, req provider.Configu
 	username := os.Getenv("DEFECTDOJO_USERNAME")
 	password := os.Getenv("DEFECTDOJO_PASSWORD")
 	token := os.Getenv("DEFECTDOJO_TOKEN")
+	httpProxy := os.Getenv("DEFECTDOJO_HTTP_PROXY")
+	insecureSkipVerify := os.Getenv("DEFECTDOJO_TLS_INSECURE_SKIP_VERIFY")
 
 	if !data.Host.IsNull() {
 		host = data.Host.ValueString()
@@ -103,6 +117,14 @@ func (p *DefectdojoProvider) Configure(ctx context.Context, req provider.Configu
 
 	if !data.Password.IsNull() {
 		password = data.Password.ValueString()
+	}
+
+	if !data.HTTPProxy.IsNull() {
+		httpProxy = data.HTTPProxy.ValueString()
+	}
+
+	if !data.TLSInsecureSkipVerify.IsNull() {
+		insecureSkipVerify = strconv.FormatBool(data.TLSInsecureSkipVerify.ValueBool())
 	}
 
 	if host == "" {
@@ -143,8 +165,29 @@ func (p *DefectdojoProvider) Configure(ctx context.Context, req provider.Configu
 	}
 
 	transport := cleanhttp.DefaultPooledTransport()
+	if httpProxy != "" {
+		proxyURL, err := url.Parse(httpProxy)
+		if err != nil {
+			resp.Diagnostics.AddError("Failed to parse HTTP Proxy", "Failed to parse HTTP Proxy: "+err.Error())
+			return
+		}
+		transport.Proxy = http.ProxyURL(proxyURL)
+	}
+	if insecureSkipVerify != "" {
+
+		i, err := strconv.ParseBool(insecureSkipVerify)
+		if err != nil {
+			resp.Diagnostics.AddError("Failed to parse TLS Insecure Skip Verify", "Failed to parse TLS Insecure Skip Verify: "+err.Error())
+			return
+		}
+
+		transport.TLSClientConfig = &tls.Config{
+			InsecureSkipVerify: i,
+		}
+	}
 	httpClient := retryablehttp.NewClient()
 	httpClient.HTTPClient.Transport = transport
+
 	httpClient.Logger = nil // disable logging
 
 	parsedHost, err := url.Parse(host)

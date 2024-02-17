@@ -18,7 +18,7 @@ permissions:
 jobs:
   # Ensure project builds before running testing matrix
   build:
-    name: Build Terraform Provider
+    name: Build and Lint Terraform Provider
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

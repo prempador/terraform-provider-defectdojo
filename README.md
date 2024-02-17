@@ -1,3 +1,6 @@
+[![release](https://github.com/prempador/terraform-provider-defectdojo/actions/workflows/release.yml/badge.svg)](https://github.com/prempador/terraform-provider-defectdojo/actions/workflows/release.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/prempador/terraform-provider-defectdojo)](https://goreportcard.com/report/github.com/prempador/terraform-provider-defectdojo)
+
 # Terraform Provider for Defectdojo
 
 Terraform provider for managing Defectdojo configuration and resources.
