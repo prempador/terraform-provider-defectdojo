@@ -66,6 +66,10 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Description: "The username of the user",
 				Required:    true,
 			},
+			"email": schema.StringAttribute{
+				Description: "The email of the user",
+				Required:    true,
+			},
 			"first_name": schema.StringAttribute{
 				Description: "The first name of the user",
 				Computed:    true,
@@ -73,11 +77,6 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 			},
 			"last_name": schema.StringAttribute{
 				Description: "The last name of the user",
-				Computed:    true,
-				Optional:    true,
-			},
-			"email": schema.StringAttribute{
-				Description: "The email of the user",
 				Computed:    true,
 				Optional:    true,
 			},
@@ -145,9 +144,9 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 	// Generate request from plan
 	userRequest := defectdojo.UserRequest{
 		Username:                 plan.Username.ValueString(),
+		Email:                    plan.Email.ValueString(),
 		FirstName:                plan.FirstName.ValueStringPointer(),
 		LastName:                 plan.LastName.ValueStringPointer(),
-		Email:                    plan.Email.ValueStringPointer(),
 		IsActive:                 plan.IsActive.ValueBoolPointer(),
 		IsSuperuser:              plan.IsSuperUser.ValueBoolPointer(),
 		Password:                 plan.Password.ValueStringPointer(),
@@ -258,9 +257,9 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	// Generate request from plan
 	userRequest := defectdojo.UserRequest{
 		Username:    plan.Username.ValueString(),
+		Email:       plan.Email.ValueString(),
 		FirstName:   plan.FirstName.ValueStringPointer(),
 		LastName:    plan.LastName.ValueStringPointer(),
-		Email:       plan.Email.ValueStringPointer(),
 		IsActive:    plan.IsActive.ValueBoolPointer(),
 		IsSuperuser: plan.IsSuperUser.ValueBoolPointer(),
 	}
