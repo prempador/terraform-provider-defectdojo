@@ -22,6 +22,8 @@ func TestAccDojoGroupMemberResource(t *testing.T) {
 
 				resource "defectdojo_user" "test_user" {
 					username = "DojoGroupMemberTestUser"
+					email	 = "email@email.com"
+					password = "veryHardPassword1234!"
 				}
 
 				resource "defectdojo_dojo_group_member" "test" {

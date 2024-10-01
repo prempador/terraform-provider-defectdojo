@@ -18,15 +18,17 @@ func TestAccUserResource(t *testing.T) {
 				Config: providerConfig + `
 			resource "defectdojo_user" "test" {
 				username = "User"
+				email	 = "email@email.com"
+				password = "veryHardPassword1234!"
 			}
 			`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					// Verify set fields
 					resource.TestCheckResourceAttr("defectdojo_user.test", "username", "User"),
+					resource.TestCheckResourceAttr("defectdojo_user.test", "email", "email@email.com"),
 					// Verify default fields
 					resource.TestCheckResourceAttr("defectdojo_user.test", "first_name", ""),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "last_name", ""),
-					resource.TestCheckResourceAttr("defectdojo_user.test", "email", ""),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_active", "false"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_superuser", "false"),
 					// Verify default configuration_permissions length
@@ -46,7 +48,7 @@ func TestAccUserResource(t *testing.T) {
 				username 			= "UpdatedUser"
 				first_name 			= "UpdatedFirstName"
 				last_name 			= "UpdatedLastName"
-				email 				= "email@email.com"
+				email 				= "email2@email.com"
 				is_active 			= true
 				is_superuser 		= true
 			}
@@ -56,7 +58,7 @@ func TestAccUserResource(t *testing.T) {
 					resource.TestCheckResourceAttr("defectdojo_user.test", "username", "UpdatedUser"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "first_name", "UpdatedFirstName"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "last_name", "UpdatedLastName"),
-					resource.TestCheckResourceAttr("defectdojo_user.test", "email", "email@email.com"),
+					resource.TestCheckResourceAttr("defectdojo_user.test", "email", "email2@email.com"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_active", "true"),
 					resource.TestCheckResourceAttr("defectdojo_user.test", "is_superuser", "true"),
 					// can't update configuration_permissions for now

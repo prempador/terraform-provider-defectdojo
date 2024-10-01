@@ -28,12 +28,12 @@ resource "defectdojo_user" "test_user" {
 
 ### Required
 
+- `email` (String) The email of the user
 - `username` (String) The username of the user
 
 ### Optional
 
 - `configuration_permissions` (List of Number) The configuration permissions of the user
-- `email` (String) The email of the user
 - `first_name` (String) The first name of the user
 - `is_active` (Boolean) The active status of the user
 - `is_superuser` (Boolean) The superuser status of the user

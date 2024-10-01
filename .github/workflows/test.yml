@@ -69,9 +69,9 @@ jobs:
         with:
           repository: defectdojo/django-DefectDojo
           path: ./django-DefectDojo
-          ref: d698a7a1ff2a914754a541140b236dd3092d7e8e # v2.31.1
+          ref: 8132c330119bb689505d4be649e953e9c9e827dc # v2.38.4
       - env:
-          DJANGO_VERSION: "2.31.1" # v2.31.1
+          DJANGO_VERSION: "2.38.4" # v2.38.4
         run: |
           cd django-DefectDojo && ./dc-up-d.sh && \
           docker compose logs -f initializer | grep "Admin password:" | awk -F": " '{print$2}' | xargs -0 -I {} echo "DEFECTDOJO_PASSWORD={}" >> "${GITHUB_ENV}"
