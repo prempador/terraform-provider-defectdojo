@@ -138,7 +138,7 @@ func (r *dojoGroupMemberResource) Create(ctx context.Context, req resource.Creat
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Creating Defectdojo Dojo Group Member",
-			"Could not create dojo group member unexpected error: "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not create dojo group member unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -172,7 +172,7 @@ func (r *dojoGroupMemberResource) Read(ctx context.Context, req resource.ReadReq
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Dojo Group Member",
-			"Could not read dojo group member with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read dojo group member with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -213,7 +213,7 @@ func (r *dojoGroupMemberResource) Update(ctx context.Context, req resource.Updat
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Updating Defectdojo Dojo Group Member",
-			"Could not update dojo group member with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not update dojo group member with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -223,7 +223,7 @@ func (r *dojoGroupMemberResource) Update(ctx context.Context, req resource.Updat
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Dojo Group Member",
-			"Could not read dojo group member with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read dojo group member with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -257,7 +257,7 @@ func (r *dojoGroupMemberResource) Delete(ctx context.Context, req resource.Delet
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting Defectdojo Dojo Group Member",
-			"Could not delete dojo group member, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not delete dojo group member, unexpected error: "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}

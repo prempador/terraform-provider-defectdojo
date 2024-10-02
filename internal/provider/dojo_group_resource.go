@@ -131,7 +131,7 @@ func (r *dojoGroupResource) Create(ctx context.Context, req resource.CreateReque
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Creating Defectdojo Dojo Group",
-			"Could not create dojo group unexpected error: "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not create dojo group unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -171,7 +171,7 @@ func (r *dojoGroupResource) Read(ctx context.Context, req resource.ReadRequest, 
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Dojo Group",
-			"Could not read dojo group with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read dojo group with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -226,7 +226,7 @@ func (r *dojoGroupResource) Update(ctx context.Context, req resource.UpdateReque
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Updating Defectdojo Dojo Group",
-			"Could not update dojo group with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not update dojo group with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -236,7 +236,7 @@ func (r *dojoGroupResource) Update(ctx context.Context, req resource.UpdateReque
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Dojo Group",
-			"Could not read dojo group with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read dojo group with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -276,7 +276,7 @@ func (r *dojoGroupResource) Delete(ctx context.Context, req resource.DeleteReque
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting Defectdojo Dojo Group",
-			"Could not delete dojo group, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not delete dojo group, unexpected error: "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}

@@ -377,7 +377,7 @@ func (r *engagementResource) Read(ctx context.Context, req resource.ReadRequest,
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Engagement",
-			"Could not read engagement with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read engagement with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -482,7 +482,7 @@ func (r *engagementResource) Update(ctx context.Context, req resource.UpdateRequ
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Updating Defectdojo Engagement",
-			"Could not update engagement with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not update engagement with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -492,7 +492,7 @@ func (r *engagementResource) Update(ctx context.Context, req resource.UpdateRequ
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo engagement",
-			"Could not read engagement with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read engagement with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -557,7 +557,7 @@ func (r *engagementResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting Defectdojo Engagement",
-			"Could not delete engagement, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not delete engagement, unexpected error: "+err.Error()+"\nDefectdojo responded with status:  "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
