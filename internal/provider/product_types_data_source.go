@@ -3,20 +3,6 @@
 
 package provider
 
-// "id": 0,
-// "name": "string",
-// "description": "string",
-// "critical_product": true,
-// "key_product": true,
-// "updated": "2024-02-08T21:15:54.527Z",
-// "created": "2024-02-08T21:15:54.527Z",
-// "members": [
-//   0
-// ],
-// "authorization_groups": [
-//   0
-// ],
-
 import (
 	"context"
 	"fmt"

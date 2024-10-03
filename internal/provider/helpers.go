@@ -28,6 +28,15 @@ func basetypesInt64ValueToInt32Pointer(value basetypes.Int64Value) *int32 {
 	return &v
 }
 
+// int32PointerToBasetypesInt64Value converts a *int32 to a basetypes.Int64Value.
+func int32PointerToBasetypesInt64Value(value *int32) basetypes.Int64Value {
+	if value == nil {
+		return basetypes.NewInt64Null()
+	}
+
+	return basetypes.NewInt64Value(int64(*value))
+}
+
 // basetypesStringValueToDefectdojoNullableString converts a basetypes.StringValue to a defectdojo.NullableString.
 // we need to convert some fields like this because if they are unknown,
 // defectdojo is treating an empty string as a string that needs to be validated.
