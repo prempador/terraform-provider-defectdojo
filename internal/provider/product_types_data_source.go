@@ -142,7 +142,7 @@ func (d *ProductTypesDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Product Types",
-			"Could not red product types, unexpected error: "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not red product types, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}

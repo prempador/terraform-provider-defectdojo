@@ -138,7 +138,7 @@ func (r *productTypeResource) Create(ctx context.Context, req resource.CreateReq
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Creating Defectdojo Product Type",
-			"Could not create product type, unexpected error: "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not create product type, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -183,7 +183,7 @@ func (r *productTypeResource) Read(ctx context.Context, req resource.ReadRequest
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Product Type",
-			"Could not read product type with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read product type with ID "+state.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -238,7 +238,7 @@ func (r *productTypeResource) Update(ctx context.Context, req resource.UpdateReq
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Updating Defectdojo Product Type",
-			"Could not update product type with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status:"+res.Status,
+			"Could not update product type with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -248,7 +248,7 @@ func (r *productTypeResource) Update(ctx context.Context, req resource.UpdateReq
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Defectdojo Product Type",
-			"Could not read product type with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not read product type with ID "+plan.ID.String()+": "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
@@ -295,7 +295,7 @@ func (r *productTypeResource) Delete(ctx context.Context, req resource.DeleteReq
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting Defectdojo Product Type",
-			"Could not delete product type, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+res.Status,
+			"Could not delete product type, unexpected error: "+err.Error()+"\nDefectdojo responded with status: "+fmt.Sprintf("%v", res.Body),
 		)
 		return
 	}
