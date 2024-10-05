@@ -16,21 +16,25 @@ func TestAccProductTypesDataSource(t *testing.T) {
 			//Read testing
 			{
 				Config: providerConfig + `
-				resource "defectdojo_product_type" "test" {
-					name = "ProductType"
+				resource "defectdojo_product_type" "test1" {
+					name = "ProductType1"
 				}
 
 				resource "defectdojo_product_type" "test2" {
 					name = "ProductType2"
 				}
-
-				data "defectdojo_product_types" "test" {}
 				`,
 				Check: resource.ComposeAggregateTestCheckFunc(
+					// Verify product types were created
+					resource.TestCheckResourceAttr("defectdojo_product_type.test1", "name", "ProductType1"),
+					resource.TestCheckResourceAttr("defectdojo_product_type.test2", "name", "ProductType2"),
+				),
+			},
+			{
+				Config: providerConfig + `data "defectdojo_product_types" "test" {}`,
+				Check: resource.ComposeAggregateTestCheckFunc(
 					// Verify number of product types returned
-					resource.TestCheckResourceAttr("data.defectdojo_product_types.test", "product_types.#", "1"),
-					resource.TestCheckResourceAttr("data.defectdojo_product_types.test", "product_types.0.id", "1"),
-					resource.TestCheckResourceAttr("data.defectdojo_product_types.test", "product_types.0.name", "Research and Development"),
+					resource.TestCheckResourceAttr("data.defectdojo_product_types.test", "product_types.#", "3"), // need to check for 3 because the default product type is created
 				),
 			},
 		},

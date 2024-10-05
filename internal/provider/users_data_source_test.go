@@ -27,9 +27,15 @@ func TestAccUsersDataSource(t *testing.T) {
 					email	 = "email2@email.com"
 					password = "veryHardPassword1234!"
 				}
-
-                data "defectdojo_users" "test" {}
                 `,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					// Verify users were created
+					resource.TestCheckResourceAttr("defectdojo_user.test1", "username", "User1"),
+					resource.TestCheckResourceAttr("defectdojo_user.test2", "username", "User2"),
+				),
+			},
+			{
+				Config: providerConfig + `data "defectdojo_users" "test" {}`,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					// Verify number of users returned
 					resource.TestCheckResourceAttr("data.defectdojo_users.test", "users.#", "3"), // need to check for 3 because the default user is created
