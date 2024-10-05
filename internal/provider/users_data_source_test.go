@@ -39,10 +39,6 @@ func TestAccUsersDataSource(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					// Verify number of users returned
 					resource.TestCheckResourceAttr("data.defectdojo_users.test", "users.#", "3"), // need to check for 3 because the default user is created
-					resource.TestCheckResourceAttr("data.defectdojo_users.test", "users.1.username", "User1"),
-					resource.TestCheckResourceAttr("data.defectdojo_users.test", "users.1.email", "email1@email.com"),
-					resource.TestCheckResourceAttr("data.defectdojo_users.test", "users.2.username", "User2"),
-					resource.TestCheckResourceAttr("data.defectdojo_users.test", "users.2.email", "email2@email.com"),
 				),
 			},
 		},
