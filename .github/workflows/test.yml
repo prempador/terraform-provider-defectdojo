@@ -76,7 +76,22 @@ jobs:
           ref: 8132c330119bb689505d4be649e953e9c9e827dc # v2.38.4
       - env:
           DJANGO_VERSION: "2.38.4" # v2.38.4
+          COMPOSE_PROJECT_NAME: "defectdojo-test-${{ github.run_id }}-${{ strategy.job-index }}-${{ github.run_attempt }}"
         run: |
+          # Debug: Show existing Docker resources
+          echo "=== Existing Docker volumes before cleanup ==="
+          docker volume ls | grep defectdojo || echo "No defectdojo volumes found"
+          echo "=== Existing Docker containers before cleanup ==="
+          docker ps -a | grep defectdojo || echo "No defectdojo containers found"
+          
+          # Cleanup any existing resources with our project name pattern
+          CLEANUP_PATTERN="defectdojo-test-${{ github.run_id }}-${{ strategy.job-index }}"
+          echo "=== Cleaning up resources matching pattern: ${CLEANUP_PATTERN} ==="
+          docker ps -a --format "table {{.Names}}\t{{.Status}}" | grep "${CLEANUP_PATTERN}" | awk '{print $1}' | xargs -r docker rm -f || true
+          docker volume ls --format "table {{.Name}}\t{{.Driver}}" | grep "${CLEANUP_PATTERN}" | awk '{print $1}' | xargs -r docker volume rm -f || true
+          docker network ls --format "table {{.Name}}\t{{.Driver}}" | grep "${CLEANUP_PATTERN}" | awk '{print $1}' | xargs -r docker network rm || true
+          
+          echo "=== Starting DefectDojo with project name: defectdojo-test-${{ github.run_id }}-${{ strategy.job-index }}-${{ github.run_attempt }} ==="
           cd django-DefectDojo && ./dc-up-d.sh && \
           docker compose logs -f initializer | grep "Admin password:" | awk -F": " '{print$2}' | xargs -0 -I {} echo "DEFECTDOJO_PASSWORD={}" >> "${GITHUB_ENV}"
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -96,3 +111,21 @@ jobs:
           DEFECTDOJO_HOST: "http://localhost:8080"
         run: go test -v -cover ./internal/provider/
         timeout-minutes: 10
+      - name: Cleanup Docker resources
+        if: always()
+        env:
+          COMPOSE_PROJECT_NAME: "defectdojo-test-${{ github.run_id }}-${{ strategy.job-index }}-${{ github.run_attempt }}"
+        run: |
+          echo "=== Cleaning up Docker resources ==="
+          cd django-DefectDojo || exit 0
+          docker compose down -v --remove-orphans || true
+          
+          # Additional cleanup to ensure everything is removed
+          CLEANUP_PATTERN="defectdojo-test-${{ github.run_id }}-${{ strategy.job-index }}"
+          echo "=== Force cleanup of remaining resources matching pattern: ${CLEANUP_PATTERN} ==="
+          docker ps -a --format "table {{.Names}}\t{{.Status}}" | grep "${CLEANUP_PATTERN}" | awk '{print $1}' | xargs -r docker rm -f || true
+          docker volume ls --format "table {{.Name}}\t{{.Driver}}" | grep "${CLEANUP_PATTERN}" | awk '{print $1}' | xargs -r docker volume rm -f || true
+          docker network ls --format "table {{.Name}}\t{{.Driver}}" | grep "${CLEANUP_PATTERN}" | awk '{print $1}' | xargs -r docker network rm || true
+          
+          echo "=== Final cleanup ==="
+          docker system prune -f || true
